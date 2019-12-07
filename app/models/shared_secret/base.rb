@@ -19,6 +19,10 @@ module SharedSecret
         raise ArgumentError, "Expected less than #{number_of_total_shares} required shares"
       end
 
+      if number_of_required_shares < 2
+        raise ArgumentError, 'A shared secret with less than 2 required shares is not valid'
+      end
+
       polynom = number_of_required_shares.times.map do
         Random.rand(PRIME)
       end

@@ -12,6 +12,13 @@ describe SharedSecret::Base do
       )
     end
 
+    it 'raises an error if the required shares is below 2' do
+      expect { described_class.create(number_of_required_shares: 1, number_of_total_shares: 2) }.to raise_error(
+        ArgumentError,
+        'A shared secret with less than 2 required shares is not valid'
+      )
+    end
+
     it 'creates a secret with its shares' do
       allow(Random).to receive(:rand).and_return(1234)
 
