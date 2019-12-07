@@ -18,7 +18,7 @@ Rails.application.configure do
   # Allow to use vcap in development
   config.hosts << 'dead_crumbs.vcap.me'
 
-  config.action_cable.url = "ws://dead_crumbs.vcap.me:3000/ws"
+  config.action_cable.url = 'ws://dead_crumbs.vcap.me:3000/ws'
 
 
   # Enable/disable caching. By default caching is disabled.
