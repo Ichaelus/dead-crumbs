@@ -1,13 +1,10 @@
-import { createConsumer } from '@rails/actioncable'
-
-up.compiler('body',() => {
+up.compiler('.room',() => {
 
   const roomRegex = /secrets\/(.+)\//
   const roomId = roomRegex.exec(window.location)[1]
 
-  window.consumer = createConsumer('http://' + window.location.host + '/ws')
 
-  consumer.subscriptions.create({ channel: "KeyExchangeChannel", room: roomId },{
+  const channel = consumer.subscriptions.create({ channel: "KeyExchangeChannel", room: roomId },{
     received(data) {
       if(data.type === 'message'){
         addFlash(data.message);
@@ -41,5 +38,9 @@ up.compiler('body',() => {
     let parsedNode = parser.parseFromString(alertDomString, 'text/html').querySelector('.alert');
     let prependedNode = document.querySelector('.container').prepend(parsedNode);
     up.hello(parsedNode);
+  }
+
+  return () => {
+    channel.unsubscribe()
   }
 });
