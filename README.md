@@ -35,19 +35,3 @@ heroku config:set SECRET_KEY_BASE=some_secret
 - Run integration tests with `bundle exec cucumber`
 
 Debugging hint: You can disable headless mode for javascript tests with `CHROME_HEADLESS=false bundle exec cucumber`.
-
-
-## ToDos
-
-### General
-
-* Hide the file upload behind an icon
-
-### Key Generation
-* If only one user is present, give him all keys
-* If multiple users are connected to the same "room" (URL, websocket), key parts are distributed to them
-
-### Key Combination
-* If only one user is present, he needs to upload all (k) key parts to get the secret code
-* If multple users are connected to the same "room", they must submit their parts (using a websocket).
-  Once k keys were submitted, they are all distributed
