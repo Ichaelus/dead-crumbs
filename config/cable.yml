@@ -1,3 +1,6 @@
+production:
+  adapter: postgresql
+
 development:
   adapter: postgresql
 
