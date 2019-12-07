@@ -10,7 +10,11 @@ class SecretsController < ApplicationController
     n = allowed_params[:total_parts] &.to_i
     k = allowed_params[:required_parts] &.to_i
     if n > 0 && k > 0
-      flash[:success] = 'OK! Here are your keys..' # todo
+      secret, parts = SharedSecret.create(number_of_required_shares: k, number_of_total_shares: n)
+      # todo: Only send the secret to the initiator
+      flash[:success] = "Here is your new secret: #{secret}"
+      parts = inject_required_part_number(parts, k)
+      # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts 
     else
       flash[:error] = 'Noop'
     end
@@ -24,7 +28,9 @@ class SecretsController < ApplicationController
   def queue_part_combination
     key_parts = allowed_params[:key_parts] &.reject(&:blank?) || []
     if key_parts.any?
-      # todo: websocket
+      # todo: WEBSOCKET; redis story, only try to recover if key_parts.size == required_part_number
+      required_part_number, key_parts, = extract_required_part_number(key_parts)
+      SharedSecret.recover([key_parts])
       flash[:success] = 'Parts enqueued for combination'
     else
       flash[:error] = 'Please specify any key parts'
@@ -39,6 +45,25 @@ class SecretsController < ApplicationController
       random_string = SecureRandom.hex
       redirect_to(room: random_string)
     end
+  end
+
+  def inject_required_part_number(parts, required_part_number)
+    parts.map do |part|
+      "#{part}+++#{required_part_number}"
+    end
+  end
+
+  def extract_required_part_number(parts)
+    required_part_number = nil
+    cleaned_parts = parts.map do |part|
+      required_number_of_part = part.match(/\A[^+]+\+\+\+(?<required_part_number>\d+)\z/)[:required_part_number]
+      required_part_number ||= required_number_of_part
+      if required_part_number != required_number_of_part
+        raise "Different required part numbers specified"
+      end
+      part.gsub(/\+\+\+\d+\z/, '')
+    end
+    [required_part_number, cleaned_parts]
   end
 
   def allowed_params
