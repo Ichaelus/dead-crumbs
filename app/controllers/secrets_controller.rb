@@ -15,13 +15,24 @@ class SecretsController < ApplicationController
 
     parts = inject_required_part_number(parts, k)
     users = redis.smembers("room:#{params[:room]}:users")
-    unless parts.count == users.count
+    if users.count > 1
+      if parts.count != users.count
+        raise 'parts != users'
+      end
+      parts.zip(users).each do |part, user|
+        ActionCable.server.broadcast("user_#{user}", { type: :message, message: "Your part is: #{part}" })
+        ActionCable.server.broadcast("user_#{user}", { type: :file, message: part })
+      end
+    else
+      parts.each do |part|
+        ActionCable.server.broadcast("exchange_room_#{params[:room]}", { type: :message, message: "Your part is: #{part}" })
+        ActionCable.server.broadcast("exchange_room_#{params[:room]}", { type: :file, message: part })
+      end
+    end
+    if users.count > 1 && parts.count != users.count
       raise 'parts != users'
     end
-    parts.zip(users).each do |part, user|
-      ActionCable.server.broadcast("user_#{user}", { type: :message, message: "Your part is: #{part}" })
-      ActionCable.server.broadcast("user_#{user}", { type: :file, message: part })
-    end
+
 
     # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts
   rescue ArgumentError => e
