@@ -37,6 +37,8 @@ class SecretsController < ApplicationController
     else
       flash[:error] = 'Please specify any key parts'
     end
+  rescue ArgumentError => e
+    flash[:error] = e.message
     render action: :combine
   end
 
@@ -58,10 +60,11 @@ class SecretsController < ApplicationController
   def extract_required_part_number(parts)
     required_part_number = nil
     cleaned_parts = parts.map do |part|
-      required_number_of_part = part.match(/\A[^+]+\+\+\+(?<required_part_number>\d+)\z/)[:required_part_number]
+      required_number_of_part = part.match(/\A[^+]+\+\+\+(?<required_part_number>\d+)\z/)&.[](:required_part_number)
+      raise(ArgumentError, 'No required part number given') if required_number_of_part.blank?
       required_part_number ||= required_number_of_part
       if required_part_number != required_number_of_part
-        raise "Different required part numbers specified"
+        raise(ArgumentError, "Different required part numbers specified")
       end
       part.gsub(/\+\+\+\d+\z/, '')
     end
