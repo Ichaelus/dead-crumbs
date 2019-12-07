@@ -38,7 +38,8 @@ up.compiler('body',() => {
          <span aria-hidden> ×
      </div>
     `
-    let parsedNode = parser.parseFromString(alertDomString, 'text/html');
-    document.querySelector('.alerts').append(parsedNode.querySelector('.alert'));
+    let parsedNode = parser.parseFromString(alertDomString, 'text/html').querySelector('.alert');
+    let prependedNode = document.querySelector('.container').prepend(parsedNode);
+    up.hello(parsedNode);
   }
 });
