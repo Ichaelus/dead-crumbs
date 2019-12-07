@@ -10,6 +10,7 @@ Dead Crumbs is a platform to pitch and find open-source web applications.
 - Install [ruby 2.5.3](https://github.com/rbenv/rbenv#installation)
 - Install [Node via NVM](https://github.com/nvm-sh/nvm#install--update-script) and run `nvm use` to use the projects Node version
 - Install [yarn](https://yarnpkg.com/lang/en/docs/install/)
+- Setup a redis server `sudo apt-get install redis-server `
 - Install bundler `gem install bundler`
 - Run `bundle exec bin/setup`
 - Run server `bundle exec bin/rails s` and go to [http://dead_crumbs.vcap.me:3000/](http://dead_crumbs.vcap.me:3000/)
