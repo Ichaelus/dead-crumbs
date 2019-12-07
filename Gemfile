@@ -6,7 +6,6 @@ ruby '2.6.5'
 gem 'active_type'
 gem 'assignable_values'
 gem 'bootsnap', require: false
-gem 'consul'
 gem 'edge_rider'
 gem 'exception_notification'
 gem 'haml-rails'

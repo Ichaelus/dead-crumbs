@@ -106,10 +106,6 @@ GEM
     chronic (0.10.2)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
-    consul (1.0.1)
-      edge_rider (>= 0.3.0)
-      memoized
-      rails (>= 3.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
@@ -199,7 +195,6 @@ GEM
       rubocop (~> 0.65.0)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
-    memoized (1.0.1)
     method_source (0.9.2)
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
@@ -380,7 +375,6 @@ DEPENDENCIES
   bootsnap
   capybara
   capybara-screenshot
-  consul
   cucumber
   cucumber-rails
   cucumber_factory
