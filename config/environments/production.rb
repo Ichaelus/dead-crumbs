@@ -106,6 +106,6 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   # https://blog.heroku.com/real_time_rails_implementing_websockets_in_rails_5_with_action_cable
-  config.web_socket_server_url = "wss://dead-crumbs.herokuapp.com/cable"
+  config.web_socket_server_url = "wss://dead-crumbs.herokuapp.com/ws"
   config.action_cable.allowed_request_origins = ['https://dead-crumbs.herokuapp.com', 'http://dead-crumbs.herokuapp.com']
 end

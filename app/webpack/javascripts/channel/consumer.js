@@ -1,6 +1,6 @@
 import { createConsumer } from '@rails/actioncable'
 
-window.consumer = createConsumer('http://' + window.location.host + '/ws')
+window.consumer = createConsumer(window.location.protocol + '//' + window.location.host + '/ws')
 
 up.compiler('body', () => {
 
