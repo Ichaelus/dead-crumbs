@@ -1,4 +1,4 @@
-describe SharedSecret do
+describe SharedSecret::Base do
 
   describe '.create' do
     it 'creates the requested number of shared' do
@@ -26,24 +26,7 @@ describe SharedSecret do
     end
   end
 
-  describe '.eval_polynom' do
-    it 'evaluates a polynom of first degree at point x' do
-      polynom = [5]
-
-      expect(described_class.eval_polynom(polynom, 2)).to eq(5)
-      expect(described_class.eval_polynom(polynom, 3)).to eq(5)
-    end
-
-    it 'evaluates a polynom of first degree at point x' do
-      polynom = [1, 1]
-
-      expect(described_class.eval_polynom(polynom, 2)).to eq(3)
-      expect(described_class.eval_polynom(polynom, 3)).to eq(4)
-    end
-  end
-
   describe '.recover' do
-
     it 'raises an error if not at least two shares are specified' do
       expect { described_class.recover(['TEST']) }.to raise_error(
         ArgumentError,
@@ -67,15 +50,6 @@ describe SharedSecret do
       shares = described_class.create(number_of_required_shares: 2, number_of_total_shares: 3)[1]
 
       expect(described_class.recover(shares)).to eq('170141183460469231731687303715884105726')
-    end
-  end
-
-  describe '.lagrange_interpolate' do
-    it 'raises an error if points are not unique' do
-      expect { described_class.lagrange_interpolate(0, [1, 2, 3, 3], [1, 2, 3, 4]) }.to raise_error(
-        ArgumentError,
-        'points must be distinct'
-      )
     end
   end
 
