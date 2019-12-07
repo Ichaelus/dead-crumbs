@@ -1,1 +1,14 @@
 %h1 Hello Dead Crumbs!
+
+.container
+  %h2 Generate a new shared key
+  .form-group(maybe-file-input)
+    %label Total parts*
+    %input{:name => "n", :placeholder => "Generated parts", :required => ""}
+    %input{:type => "file", target: 'n'}/
+  .form-group(maybe-file-input)
+    %label Required parts*
+    %input{:name => "k", :placeholder => "Required parts", :required => ""}
+    %input{:type => "file", target: 'k'}
+  
+  %h2 Combine your key fragments
