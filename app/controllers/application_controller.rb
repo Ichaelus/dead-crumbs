@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
 
-  include SessionHelper
   include Consul::Controller
 
   protect_from_forgery with: :exception
