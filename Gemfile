@@ -7,7 +7,6 @@ gem 'active_type'
 gem 'assignable_values'
 gem 'bootsnap', require: false
 gem 'edge_rider'
-gem 'exception_notification'
 gem 'haml-rails'
 gem 'has_defaults'
 gem 'json-schema'
