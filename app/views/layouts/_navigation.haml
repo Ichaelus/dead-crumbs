@@ -8,6 +8,6 @@
     #collapsable_navigation.collapse.navbar-collapse
       %ul.navbar-nav(up-nav)
         %li.nav-item
-          = content_link_to 'Example 1', root_path, class: 'nav-link', :'up-alias' => "#{root_path}"
+          = content_link_to 'Generate', generate_secrets_path, class: 'nav-link', :'up-alias' => "#{generate_secrets_path}"
         %li.nav-item
-          = content_link_to 'Example 1', root_path, class: 'nav-link', :'up-alias' => "#{root_path}"
+          = content_link_to 'Combine', combine_secrets_path, class: 'nav-link', :'up-alias' => "#{combine_secrets_path}"
