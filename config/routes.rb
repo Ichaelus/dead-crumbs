@@ -5,9 +5,10 @@ Rails.application.routes.draw do
     collection do
       get :generate
       get ":room/generate", action: :generate
-      post :generate
+      post ":room/generate", action: :create_key_parts
       get :combine
-      post :combine
+      get ":room/combine", action: :combine
+      post ":room/combine", action: :queue_part_combination
     end
   end
 
