@@ -38,11 +38,17 @@ class SecretsController < ApplicationController
   def queue_part_combination
     key_parts = allowed_params[:key_parts] &.reject(&:blank?) || []
     if key_parts.any?
-      # todo add key_parts to room specifiy array
-      # todo check if secret is ready and send it
-      required_part_number, key_parts, = extract_required_part_number(key_parts)
-      flash.now[:success] = "Parts enqueued for combination. Currently guessing your key is #{SharedSecret::Base.recover(key_parts)}"
-      ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: "#{key_parts.count} key parts have been added!" })
+      redis_key = "room:#{allowed_params[:room]}:key_parts"
+      redis.sadd(redis_key, key_parts)
+      present_key_parts = redis.smembers(redis_key)
+      required_part_number, key_parts, = extract_required_part_number(present_key_parts)
+      if present_key_parts.count == required_part_number
+        msg = "All parts are ready. Guessing your key is #{SharedSecret::Base.recover(present_key_parts)}"
+        ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: msg })
+        redis.del(redis_key)
+      else
+        ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: "#{present_key_parts.count}/#{required_part_number} key parts have been added!" })
+      end
     else
       flash.now[:error] = 'Please specify any key parts'
     end
@@ -78,7 +84,7 @@ class SecretsController < ApplicationController
       end
       part.gsub(/\+\+\+\d+\z/, '')
     end
-    [required_part_number, cleaned_parts]
+    [required_part_number.to_i, cleaned_parts]
   end
 
   def allowed_params
