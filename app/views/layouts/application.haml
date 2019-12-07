@@ -21,8 +21,8 @@
     .flex-shrink-0
       .container.mb-5
         = render 'layouts/navigation'
-        = render 'layouts/flashes'
 
         .page-target
+          = render 'layouts/flashes'
           .modal-target= yield
     = render 'layouts/footer'

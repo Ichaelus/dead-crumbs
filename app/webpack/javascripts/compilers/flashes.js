@@ -3,5 +3,9 @@ up.compiler('.alert ', function(element) {
 
   button.addEventListener('click', function(event) {
     element.remove()
-  })
+  });
+
+  setTimeout(function(){
+    element.remove();
+  }, 5000);
 })

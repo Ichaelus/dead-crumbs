@@ -9,15 +9,17 @@ class SecretsController < ApplicationController
   def create_key_parts
     n = allowed_params[:total_parts] &.to_i
     k = allowed_params[:required_parts] &.to_i
-    if n > 0 && k > 0
-      secret, parts = SharedSecret.create(number_of_required_shares: k, number_of_total_shares: n)
-      # todo: Only send the secret to the initiator
-      flash[:success] = "Here is your new secret: #{secret}"
-      parts = inject_required_part_number(parts, k)
-      # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts
-    else
-      flash[:error] = 'Noop'
+    secret, parts = SharedSecret.create(number_of_required_shares: k, number_of_total_shares: n)
+    # todo: Only send the secret to the initiator
+    flash.now[:success] = "Here is your new secret: #{secret}"
+    parts = inject_required_part_number(parts, k)
+    parts.each do |part|
+      ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :file, message: part })
     end
+    # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts
+  rescue ArgumentError => e
+    flash.now[:error] = e.message
+  ensure
     render action: :generate
   end
 
@@ -28,17 +30,17 @@ class SecretsController < ApplicationController
   def queue_part_combination
     key_parts = allowed_params[:key_parts] &.reject(&:blank?) || []
     if key_parts.any?
-      ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: "#{key_parts.count} key parts have been added!" })
       # todo add key_parts to room specifiy array
       # todo check if secret is ready and send it
       required_part_number, key_parts, = extract_required_part_number(key_parts)
-      SharedSecret.recover([key_parts])
-      flash[:success] = 'Parts enqueued for combination'
+      flash.now[:success] = "Parts enqueued for combination. Currently guessing your key is #{SharedSecret.recover([key_parts])}"
+      ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: "#{key_parts.count} key parts have been added!" })
     else
-      flash[:error] = 'Please specify any key parts'
+      flash.now[:error] = 'Please specify any key parts'
     end
   rescue ArgumentError => e
-    flash[:error] = e.message
+    flash.now[:error] = e.message
+  ensure
     render action: :combine
   end
 
