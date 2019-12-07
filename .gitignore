@@ -31,3 +31,6 @@ yarn-debug.log*
 .~lock.*
 .*.swp
 passenger.*
+
+.generators
+.rakeTasks
