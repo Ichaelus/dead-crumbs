@@ -5,7 +5,7 @@ up.compiler('.generator', function(form){
     if(evt.userCount > 1){
       totalPartsInput.min = totalPartsInput.max = totalPartsInput.value = evt.userCount;
     }else{
-      totalPartsInput.min = 1;
+      totalPartsInput.min = 2;
       totalPartsInput.max = undefined;
     }
   });

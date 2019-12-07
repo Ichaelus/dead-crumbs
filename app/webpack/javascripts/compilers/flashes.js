@@ -7,5 +7,5 @@ up.compiler('.alert ', function(element) {
 
   setTimeout(function(){
     element.remove();
-  }, 5000);
+  }, 7500);
 })
