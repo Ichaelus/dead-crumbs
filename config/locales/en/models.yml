@@ -1,0 +1,51 @@
+# https://makandracards.com/makandra/15887
+
+en:
+  models: &models
+    conversation:
+      one: Conversation
+      other: Conversations
+    message:
+      one: Message
+      other: Messages
+    repository:
+      one: Repository
+      other: Repositories
+
+  attributes: &attributes
+    created_at: Created at
+    updated_at: Updated at
+
+    conversation:
+      title: Title
+      body: Message
+      user: Author
+    message:
+      body: Message
+      user: Author
+      conversation: Conversation
+    repository:
+      title: Title
+      owner: Owner
+      name: Name
+      description: Description
+      homepage_url: Homepage URL
+      total_stars: Stars
+      total_watchers: Watchers
+      total_issues: Issues
+      first_commit_at: First commit at
+      last_commit_at: Last commit at
+      last_commits_at: Last commits at
+      languages: Languages
+      licence: License
+      last_synchronized_at: Last synchronize at
+      user: Hunter
+      repository_url: Repository URL
+
+  activerecord:
+    models: *models
+    attributes: *attributes
+
+  activemodel:
+    models: *models
+    attributes: *attributes

@@ -1,0 +1,16 @@
+{
+  "name": "dead_crumbs",
+  "private": true,
+  "dependencies": {
+    "@rails/webpacker": "4.0.2",
+    "autosize": "*",
+    "bootstrap": "4.x",
+    "dom4": "*",
+    "rails-ujs": "5.2.2",
+    "secrets.js": "^0.1.8",
+    "unpoly": "0.60.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "3.2.1"
+  }
+}

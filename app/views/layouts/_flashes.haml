@@ -1,0 +1,7 @@
+- flash_mapping = {'success' => 'success', 'error' => 'danger'}
+.alerts(up-hungry)
+  - flash.each do |level, message|
+    %div{class: "alert alert-#{flash_mapping.fetch(level)}"}
+      = message
+      %button(type='button' class='close' aria-label='Close')
+        %span(aria-hidden) ×

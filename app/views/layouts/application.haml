@@ -1,0 +1,28 @@
+!!!
+%html{lang: I18n.locale, class: 'h-100'}
+
+  %head
+    %meta(charset='utf-8')
+    %meta(http-equiv='x-ua-compatible' content='ie=edge')
+    %meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    %meta(name='description' content='Collaborative open-source web applications')
+
+    = render 'layouts/favicons'
+
+    = csrf_meta_tags
+
+    %title
+      Dead Crumbs
+
+    = javascript_pack_tag 'application'
+    = stylesheet_pack_tag 'application'
+
+  %body{data: {env: Rails.env}, class: 'd-flex flex-column h-100'}
+    .flex-shrink-0
+      .container.mb-5
+        = render 'layouts/navigation'
+        = render 'layouts/flashes'
+
+        .page-target
+          .modal-target= yield
+    = render 'layouts/footer'
