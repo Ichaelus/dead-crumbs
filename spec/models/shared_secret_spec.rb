@@ -43,11 +43,39 @@ describe SharedSecret do
   end
 
   describe '.recover' do
-    it 'returns the same secret every time' do
-      secrets = ['be70b1eab59c3b5408eb009e', 'be70b1eab59c3b5408eb009e']
 
-      expect(described_class.recover(secrets)).to eq('8f41ed9b51ebb569e')
-      expect(described_class.recover(secrets)).to eq('8f41ed9b51ebb569e')
+    it 'raises an error if not at least two shares are specified' do
+      expect { described_class.recover(['TEST']) }.to raise_error(
+        ArgumentError,
+        'need at least two shares'
+      )
+    end
+
+    it 'returns the secret' do
+      shares = [
+        '1---2468',
+        '2---3702',
+        '3---4936',
+      ]
+
+      expect(described_class.recover(shares)).to eq('1234')
+    end
+
+    it 'works with numbers that exceed the prime field' do
+      allow(Random).to receive(:rand).and_return(described_class::PRIME - 1)
+
+      shares = described_class.create(number_of_required_shares: 2, number_of_total_shares: 3)[1]
+
+      expect(described_class.recover(shares)).to eq('170141183460469231731687303715884105726')
+    end
+  end
+
+  describe '.lagrange_interpolate' do
+    it 'raises an error if points are not unique' do
+      expect { described_class.lagrange_interpolate(0, [1, 2, 3, 3], [1, 2, 3, 4]) }.to raise_error(
+        ArgumentError,
+        'points must be distinct'
+      )
     end
   end
 
