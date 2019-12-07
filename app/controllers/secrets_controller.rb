@@ -12,12 +12,20 @@ class SecretsController < ApplicationController
     secret, parts = SharedSecret.create(number_of_required_shares: k, number_of_total_shares: n)
     # todo: Only send the secret to the initiator
     flash.now[:success] = "Here is your new secret: #{secret}"
+
     parts = inject_required_part_number(parts, k)
-    parts.each do |part|
-      ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :file, message: part })
+    users = redis.smembers("room:#{params[:room]}:users")
+    unless parts.count == users.count
+      raise 'parts != users'
     end
+    parts.zip(users).each do |part, user|
+      ActionCable.server.broadcast("user_#{user}", { type: :message, message: "Your part is: #{part}" })
+      ActionCable.server.broadcast("user_#{user}", { type: :file, message: part })
+    end
+
     # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts
   rescue ArgumentError => e
+    raise e
     flash.now[:error] = e.message
   ensure
     render action: :generate

@@ -1,20 +1,19 @@
 up.compiler('.room',() => {
-
   const roomRegex = /secrets\/(.+)\//
   const roomId = roomRegex.exec(window.location)[1]
 
-
-  const channel = consumer.subscriptions.create({ channel: "KeyExchangeChannel", room: roomId },{
-    received(data) {
-      if(data.type === 'message'){
-        addFlash(data.message);
-      }else if(data.type === 'file'){
-        download('secret_part.txt', data.message);
-      }else if(data.type === 'user-count-changed'){
-        up.emit('room:user-count-changed', { userCount: data.message });
-      }
+  function received(data) {
+    if(data.type === 'message'){
+      addFlash(data.message);
+    }else if(data.type === 'file'){
+      download('secret_part.txt', data.message);
+    }else if(data.type === 'user-count-changed'){
+      up.emit('room:user-count-changed', { userCount: data.message });
     }
-  });
+  }
+
+  const roomChannel = consumer.subscriptions.create({ channel: "KeyExchangeChannel", room: roomId },{ received: received });
+  const userChannel = consumer.subscriptions.create({ channel: "UserChannel", room: roomId },{ received: received })
 
   function download(filename, text) {
     var element = document.createElement('a');
@@ -42,7 +41,9 @@ up.compiler('.room',() => {
     up.hello(parsedNode);
   }
 
+
   return () => {
-    channel.unsubscribe()
+    userChannel.unsubscribe()
+    roomChannel.unsubscribe()
   }
 });
