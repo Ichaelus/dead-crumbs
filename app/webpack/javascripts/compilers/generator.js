@@ -3,10 +3,10 @@ up.compiler('.generator', function(form){
 
   up.on('room:user-count-changed', function(evt){
     if(evt.userCount > 1){
-      totalPartsInput.disabled = true;
-      totalPartsInput.value = evt.userCount;
+      totalPartsInput.min = totalPartsInput.max = totalPartsInput.value = evt.userCount;
     }else{
-      totalPartsInput.disabled = false;
+      totalPartsInput.min = 1;
+      totalPartsInput.max = undefined;
     }
   });
 });
