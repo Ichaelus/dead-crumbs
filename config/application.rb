@@ -11,7 +11,7 @@ require 'action_mailer/railtie'
 # require 'action_mailbox/engine'
 # require 'action_text/engine'
 require 'action_view/railtie'
-# require 'action_cable/engine'
+require 'action_cable/engine'
 require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
@@ -62,5 +62,7 @@ module DeadCrumbs
       g.assets false
       g.fixture_replacement :factory_bot
     end
+
+    config.action_cable.mount_path = '/ws'
   end
 end

@@ -14,7 +14,7 @@ class SecretsController < ApplicationController
       # todo: Only send the secret to the initiator
       flash[:success] = "Here is your new secret: #{secret}"
       parts = inject_required_part_number(parts, k)
-      # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts 
+      # Todo: Send each listener a part (WEBSOCKECT), including the number of required parts
     else
       flash[:error] = 'Noop'
     end
@@ -28,7 +28,9 @@ class SecretsController < ApplicationController
   def queue_part_combination
     key_parts = allowed_params[:key_parts] &.reject(&:blank?) || []
     if key_parts.any?
-      # todo: WEBSOCKET; redis story, only try to recover if key_parts.size == required_part_number
+      ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: "#{key_parts.count} key parts have been added!" })
+      # todo add key_parts to room specifiy array
+      # todo check if secret is ready and send it
       required_part_number, key_parts, = extract_required_part_number(key_parts)
       SharedSecret.recover([key_parts])
       flash[:success] = 'Parts enqueued for combination'
