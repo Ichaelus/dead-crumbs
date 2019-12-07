@@ -7,12 +7,14 @@ class UserChannel < ApplicationCable::Channel
     redis.sadd("room:#{@room_id}:users", @user_token)
     user_count = redis.smembers("room:#{params[:room]}:users").count
     ActionCable.server.broadcast("exchange_room_#{params[:room]}", { type: :message, message: "A user has joined the room. There are now #{user_count} users." })
+    ActionCable.server.broadcast("exchange_room_#{params[:room]}", { type: :'user-count-changed', message: user_count })
   end
 
   def unsubscribed
     redis.srem("room:#{@room_id}:users", @user_token)
     user_count = redis.smembers("room:#{@room_id}:users").count
     ActionCable.server.broadcast("exchange_room_#{params[:room]}", {type: :message, message: "A user has left the room. There are now #{user_count} users."})
+    ActionCable.server.broadcast("exchange_room_#{params[:room]}", { type: :'user-count-changed', message: user_count })
   end
 
   private

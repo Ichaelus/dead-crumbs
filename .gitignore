@@ -34,3 +34,4 @@ passenger.*
 
 .generators
 .rakeTasks
+dump.rdb

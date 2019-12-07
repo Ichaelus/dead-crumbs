@@ -10,6 +10,8 @@ up.compiler('.room',() => {
         addFlash(data.message);
       }else if(data.type === 'file'){
         download('secret_part.txt', data.message);
+      }else if(data.type === 'user-count-changed'){
+        up.emit('room:user-count-changed', { userCount: data.message });
       }
     }
   });
