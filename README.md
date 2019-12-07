@@ -22,6 +22,11 @@ git push heroku
 heroku run rails db:migrate
 ```
 
+Before the first deploy you need to set the secrets required in `config/secrets.yml`:
+
+```
+heroku config:set SECRET_KEY_BASE=some_secret
+```
 
 ## Tests
 
