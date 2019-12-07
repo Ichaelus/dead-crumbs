@@ -41,7 +41,7 @@ class SecretsController < ApplicationController
       # todo add key_parts to room specifiy array
       # todo check if secret is ready and send it
       required_part_number, key_parts, = extract_required_part_number(key_parts)
-      flash.now[:success] = "Parts enqueued for combination. Currently guessing your key is #{SharedSecret::Base.recover([key_parts])}"
+      flash.now[:success] = "Parts enqueued for combination. Currently guessing your key is #{SharedSecret::Base.recover(key_parts)}"
       ActionCable.server.broadcast("exchange_room_#{allowed_params[:room]}", { type: :message, message: "#{key_parts.count} key parts have been added!" })
     else
       flash.now[:error] = 'Please specify any key parts'
