@@ -6,6 +6,8 @@ up.compiler('.alert ', function(element) {
   });
 
   setTimeout(function(){
-    element.remove();
-  }, 7500);
+    if (!element.classList.contains('-persistent')){
+      element.remove();
+    }
+  }, 10000);
 })

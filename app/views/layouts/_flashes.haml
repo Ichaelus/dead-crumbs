@@ -1,4 +1,4 @@
-- flash_mapping = {'success' => 'success', 'error' => 'danger'}
+- flash_mapping = {'success' => 'success', 'error' => 'danger', 'persistent' => 'success -persistent'}
 .alerts(up-hungry)
   - flash.each do |level, message|
     %div{class: "alert alert-#{flash_mapping.fetch(level)}"}

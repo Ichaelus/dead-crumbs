@@ -11,7 +11,7 @@ class SecretsController < ApplicationController
     k = allowed_params[:required_parts] &.to_i
     secret, parts = SharedSecret::Base.create(number_of_required_shares: k, number_of_total_shares: n)
     # todo: Only send the secret to the initiator
-    flash.now[:success] = "Here is your new secret: #{secret}"
+    flash.now[:persistent] = "Here is your new secret: #{secret}"
 
     parts = inject_required_part_number(parts, k)
     users = redis.smembers("room:#{params[:room]}:users")

@@ -13,8 +13,6 @@ up.compiler('body', () => {
     let roomRegex = /secrets\/(.+)\//
     let roomId = roomRegex.exec(window.location)[1]
 
-    debugger
-
     if(currentRoomId !== roomId){
       currentRoomId = roomId;
 
