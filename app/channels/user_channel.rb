@@ -11,10 +11,14 @@ class UserChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    redis.srem("room:#{@room_id}:users", @user_token)
-    user_count = redis.smembers("room:#{@room_id}:users").count
+    room_users_key = "room:#{@room_id}:users"
+    redis.srem(room_users_key, @user_token)
+    user_count = redis.smembers(room_users_key).count
     ActionCable.server.broadcast("exchange_room_#{params[:room]}", {type: :message, message: "A user has left the room. There are now #{user_count} users."})
     ActionCable.server.broadcast("exchange_room_#{params[:room]}", { type: :'user-count-changed', message: user_count })
+    if user_count == 0
+      redis.del(room_users_key)
+    end
   end
 
   private
