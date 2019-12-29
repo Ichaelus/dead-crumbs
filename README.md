@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Ichaelus/dead_crumbs.svg?branch=master)](https://travis-ci.org/Ichaelus/dead_crumbs)
 
 # Dead Crumbs
-Dead Crumbs is a platform to pitch and find open-source web applications.
+You can use Dead Crumbs to generate a secret, which is then split across multiple keys. These keys can later be re-assembled to the secret.
 
 # Development
 
